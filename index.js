@@ -1,12 +1,17 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const cors = require('cors');  // Importando o CORS
 
 dotenv.config();
 
 const app = express();
+
+// Habilitando o CORS para todas as origens ou configurando um domínio específico
+app.use(cors()); // Permite todas as origens (pode restringir se necessário)
 app.use(express.json());
 
+// Configuração do Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -15,6 +20,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Rota para envio do e-mail
 app.post('/send-email', (req, res) => {
   const { nome, email, assunto, mensagem } = req.body;
 
@@ -33,6 +39,7 @@ app.post('/send-email', (req, res) => {
   });
 });
 
+// Configurando a porta do servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
